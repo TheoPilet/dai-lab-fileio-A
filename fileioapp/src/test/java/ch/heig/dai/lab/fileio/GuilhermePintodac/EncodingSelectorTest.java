@@ -21,7 +21,7 @@ public class EncodingSelectorTest {
     }
 
     @Test
-    
+
     public void nullTest() {
         assertEquals (null, selector.getEncoding(new File("file1.utf")));
         assertEquals (null, selector.getEncoding(new File("file1")));
