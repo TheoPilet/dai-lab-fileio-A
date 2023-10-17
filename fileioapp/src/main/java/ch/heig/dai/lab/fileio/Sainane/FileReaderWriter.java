@@ -26,7 +26,7 @@ public class FileReaderWriter {
                 builder.append("\n");
             }
 
-            builder.deleteCharAt(builder.lastIndexOf("\n"));
+            builder.deleteCharAt(builder.length()-1);
             return builder.toString();
         } catch (IOException e) {
             System.out.println("Exception: " + e);
