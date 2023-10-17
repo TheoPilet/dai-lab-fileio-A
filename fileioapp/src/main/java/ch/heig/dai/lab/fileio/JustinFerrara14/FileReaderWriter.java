@@ -45,7 +45,7 @@ public class FileReaderWriter {
         // Make sure to flush the data and close the streams and readers at the end.
 
         try(var os = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), encoding))){
-            os.write(content);
+            os.write(content, 0, content.length());
             os.flush();
             os.close();
             return true;
