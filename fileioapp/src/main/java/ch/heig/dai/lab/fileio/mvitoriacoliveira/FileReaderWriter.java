@@ -15,6 +15,11 @@ public class FileReaderWriter {
         // TODO: Implement the method body here. 
         // Use the ...Stream and ...Reader classes from the java.io package.
         // Make sure to close the streams and readers at the end.
+        try( BufferedReader is = new BufferedReader(new InputStreamReader( new FileInputStream(file.getName()), encoding));){
+
+        } catch (IOException e){
+            System.out.println("Exception: " + e);
+        }
         return null;
     }
 
