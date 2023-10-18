@@ -36,7 +36,7 @@ public class Transformer {
         } catch (Exception e) {
             return null;
         }
-        return result.toString();
+        return result;
 
 
     }
