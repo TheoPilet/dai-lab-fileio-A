@@ -15,14 +15,24 @@ public class FileReaderWriter {
         // TODO: Implement the method body here. 
         // Use the ...Stream and ...Reader classes from the java.io package.
         // Make sure to close the streams and readers at the end.
-        try( BufferedReader is = new BufferedReader(new InputStreamReader( new FileInputStream(file.getName()), encoding));){
 
+        String END_OF_LINE = "\n";
+        StringBuilder content = new StringBuilder();
+
+        try(BufferedReader is = new BufferedReader(new InputStreamReader( 
+            new FileInputStream(file.getName()), encoding));){
+            
+            String currentLine;            
+            while((currentLine = is.readLine()) != null){
+                content.append(currentLine).append(END_OF_LINE);
+            } 
+            is.close();
+            return content.toString();
         } catch (IOException e){
             System.out.println("Exception: " + e);
         }
         return null;
     }
-
     /**
      * Write the content to a file with a given encoding. 
      * @param file the file to write to
