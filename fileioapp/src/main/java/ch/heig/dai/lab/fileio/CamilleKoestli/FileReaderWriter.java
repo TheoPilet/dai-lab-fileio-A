@@ -42,6 +42,7 @@ public class FileReaderWriter {
 
             writer.write(content);
             writer.flush();
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();
