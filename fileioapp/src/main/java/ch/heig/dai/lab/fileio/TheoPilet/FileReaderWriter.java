@@ -12,24 +12,22 @@ public class FileReaderWriter {
      * @return the content of the file as a String, or null if an error occurred.
      */
     public String readFile(File file, Charset encoding) {
-        try (Reader reader = new FileReader(file,encoding)){
+        StringBuilder writer = new StringBuilder();
 
-            String content = "";
-            int character;
+        try (FileInputStream fileReader = new FileInputStream(file);) {
 
-            while ((character = reader.read()) != -1){
-                String s = content;
-                content = s + character;
+            var reader = new BufferedReader(new InputStreamReader(fileReader, encoding));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                writer.append(line).append("\n");
             }
-
-            reader.close();
-
-            return  content;
-            
-        }catch (IOException e){
+            writer.deleteCharAt(writer.length() - 1);
+            return writer.toString();
+        } catch (IOException e){
             System.out.println("Exception: " + e);
-            return null;
+
         }
+        return null;
     }
 
     /**
@@ -40,13 +38,12 @@ public class FileReaderWriter {
      * @return true if the file was written successfully, false otherwise
      */
     public boolean writeFile(File file, String content, Charset encoding) {
-        try (Writer writer = new FileWriter(file,encoding)){
+        try(FileOutputStream fileOutputStream = new FileOutputStream(file)){
+            var writer = new BufferedWriter(new OutputStreamWriter(fileOutputStream, encoding));
             writer.write(content);
             writer.flush();
-            writer.close();
             return true;
-
-        }catch (IOException e){
+        } catch(IOException e){
             System.out.println("Exception: " + e);
         }
         return false;

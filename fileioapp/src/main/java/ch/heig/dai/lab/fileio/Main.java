@@ -2,6 +2,7 @@ package ch.heig.dai.lab.fileio;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -43,27 +44,26 @@ public class Main {
 
         while (true) {
             try {
-                 File file = fileExplorer.getNewFile();
+                
+                File currentFile = fileExplorer.getNewFile();
+                // if currentFile is null, all files in the folder have been processed, so we can break the while loop
+                if(currentFile == null) break;
 
-                if (file == null) {
-                    System.out.println("No more files to process.");
-                    break;
-                }
+                Charset encoding = encodingSelector.getEncoding(currentFile);
+                if(encoding == null) continue;
 
-                Charset encoding = encodingSelector.getEncoding(file);
-                String content = fileReaderWriter.readFile(file, encoding);
+                String fileContent = fileReaderWriter.readFile(currentFile, encoding);
+                if(fileContent == null) continue;
 
-                if (content != null) {
-                    content = transformer.replaceChuck(content);
-                    content = transformer.capitalizeWords(content);
-                    content = transformer.wrapAndNumberLines(content);
+                // transform the file content: replace the name, capitalize all words, number lines
+                String processedFileContent =
+                        transformer.wrapAndNumberLines(transformer.capitalizeWords(transformer.replaceChuck(fileContent)));
 
-                    Path outputPath = Paths.get(file.getAbsolutePath() + ".processed");
-                    fileReaderWriter.writeFile(outputPath.toFile(), content, Charset.forName("UTF-8"));
-                    System.out.println(outputPath + " has been processed and saved: " );
-                } else {
-                    System.out.println("Failed to read the file: " + file);
-                }
+                // create a new file with transformed content
+                fileReaderWriter.writeFile(new File(currentFile.getAbsolutePath() + ".processed"),
+                        processedFileContent, StandardCharsets.UTF_8);
+
+
 
             } catch (Exception e) {
                 System.out.println("Exception: " + e);
